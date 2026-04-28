@@ -791,6 +791,69 @@
     line-height: 1.4;
   }
   .rutas-ext-link:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ── WIDGET RUTAS LINKS ── */
+  .ruta-link-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.75rem 0.9rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent3);
+    border-radius: 3px;
+    text-decoration: none;
+    color: var(--text);
+    transition: background 0.18s, border-color 0.18s, transform 0.15s;
+  }
+  .ruta-link-btn:hover {
+    background: var(--surface2);
+    border-color: var(--accent3);
+    transform: translateX(4px);
+  }
+  .ruta-link-tabsa {
+    border-left-color: var(--accent);
+  }
+  .ruta-link-tabsa:hover {
+    border-color: var(--accent);
+  }
+  .ruta-link-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .ruta-link-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .ruta-link-name {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .ruta-link-src {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+  .ruta-link-arrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--muted);
+    opacity: 0.5;
+    transition: opacity 0.18s, color 0.18s;
+  }
+  .ruta-link-btn:hover .ruta-link-arrow {
+    opacity: 1;
+    color: var(--accent3);
+  }
+  .ruta-link-tabsa:hover .ruta-link-arrow {
+    color: var(--accent);
+  }
 </style>
 </head>
 <body>
@@ -871,36 +934,40 @@
     </div>
 
     <!-- WIDGET RUTAS -->
-    <div class="widget-card widget-card-rutas">
+    <div class="widget-card">
       <div class="widget-header">
-        <span class="widget-title">🛣️ Estado de rutas · AGVP Santa Cruz</span>
-        <div style="display:flex;align-items:center;gap:0.6rem;">
-          <button class="rutas-reload-btn" onclick="reloadAgvp()" title="Recargar">↺</button>
-          <a class="rutas-ext-link" href="https://www.agvp.gob.ar/servicios/parte-de-transitabilidad/parte-rutas-provinciales/" target="_blank" rel="noopener" title="Abrir en pestaña">↗</a>
-        </div>
+        <span class="widget-title">🛣️ Tránsito y conectividad · Santa Cruz</span>
+        <span class="widget-badge">● ACCESO DIRECTO</span>
       </div>
-      <div class="rutas-iframe-wrap">
-        <div class="rutas-iframe-overlay" id="rutas-overlay">
-          <div class="rutas-iframe-msg">
-            <span style="font-size:1.4rem;">🛣️</span>
-            <span>Cargando parte AGVP...</span>
+      <div class="widget-body" style="padding:0.8rem; display:flex; flex-direction:column; gap:0.6rem;">
+
+        <a class="ruta-link-btn" href="https://www.agvp.gob.ar/servicios/parte-de-transitabilidad/parte-rutas-provinciales/" target="_blank" rel="noopener">
+          <div class="ruta-link-icon">🛣️</div>
+          <div class="ruta-link-info">
+            <div class="ruta-link-name">Rutas Provinciales</div>
+            <div class="ruta-link-src">AGVP · Santa Cruz</div>
           </div>
-        </div>
-        <iframe
-          id="agvp-iframe"
-          src="https://www.agvp.gob.ar/servicios/parte-de-transitabilidad/parte-rutas-provinciales/"
-          title="AGVP - Estado de rutas provinciales"
-          sandbox="allow-scripts allow-same-origin allow-forms"
-          onload="iframeLoaded()"
-          onerror="iframeError()"
-        ></iframe>
-      </div>
-      <div class="rutas-footer">
-        <span id="rutas-ts" class="rutas-ts">—</span>
-        <div style="display:flex;gap:0.5rem;">
-          <button class="rutas-tab-btn active" onclick="switchAgvp('provinciales',this)">Provinciales</button>
-          <button class="rutas-tab-btn" onclick="switchAgvp('nacionales',this)">Nacionales</button>
-        </div>
+          <div class="ruta-link-arrow">↗</div>
+        </a>
+
+        <a class="ruta-link-btn" href="https://www.argentina.gob.ar/transporte/vialidad-nacional/estado-de-rutas" target="_blank" rel="noopener">
+          <div class="ruta-link-icon">🏗️</div>
+          <div class="ruta-link-info">
+            <div class="ruta-link-name">Rutas Nacionales</div>
+            <div class="ruta-link-src">Vialidad Nacional Argentina</div>
+          </div>
+          <div class="ruta-link-arrow">↗</div>
+        </a>
+
+        <a class="ruta-link-btn ruta-link-tabsa" href="https://www.tabsa.cl/estado-cruces" target="_blank" rel="noopener">
+          <div class="ruta-link-icon">⛴️</div>
+          <div class="ruta-link-info">
+            <div class="ruta-link-name">Estado de Cruces — Barcaza</div>
+            <div class="ruta-link-src">TABSA · Primera Angostura · TDF</div>
+          </div>
+          <div class="ruta-link-arrow">↗</div>
+        </a>
+
       </div>
     </div>
 
@@ -983,58 +1050,6 @@ async function fetchClima() {
         </small>
       </div>`;
   }
-}
-
-// ── WIDGET RUTAS — iframe AGVP ──
-const AGVP_URLS = {
-  provinciales: 'https://www.agvp.gob.ar/servicios/parte-de-transitabilidad/parte-rutas-provinciales/',
-  nacionales:   'https://www.agvp.gob.ar/servicios/parte-de-transitabilidad/parte-rutas-nacionales/'
-};
-let agvpCurrent = 'provinciales';
-
-function iframeLoaded() {
-  const overlay = document.getElementById('rutas-overlay');
-  const ts = document.getElementById('rutas-ts');
-  if (overlay) overlay.style.display = 'none';
-  if (ts) ts.textContent = 'Actualizado: ' + new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});
-}
-
-function iframeError() {
-  const overlay = document.getElementById('rutas-overlay');
-  if (overlay) overlay.innerHTML = `
-    <div class="rutas-iframe-msg">
-      <span style="font-size:1.4rem;">⚠️</span>
-      <span>No se pudo cargar el parte AGVP</span>
-      <a href="${AGVP_URLS[agvpCurrent]}" target="_blank" rel="noopener"
-         style="color:var(--accent);font-size:0.65rem;margin-top:0.3rem;">
-        Abrir en nueva pestaña ↗
-      </a>
-    </div>`;
-}
-
-function reloadAgvp() {
-  const iframe = document.getElementById('agvp-iframe');
-  const overlay = document.getElementById('rutas-overlay');
-  if (overlay) {
-    overlay.style.display = 'flex';
-    overlay.innerHTML = '<div class="rutas-iframe-msg"><span style="font-size:1.4rem;">🛣️</span><span>Recargando...</span></div>';
-  }
-  if (iframe) iframe.src = iframe.src;
-}
-
-function switchAgvp(tipo, btn) {
-  agvpCurrent = tipo;
-  const iframe = document.getElementById('agvp-iframe');
-  const overlay = document.getElementById('rutas-overlay');
-  const extLink = document.querySelector('.rutas-ext-link');
-  document.querySelectorAll('.rutas-tab-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  if (overlay) {
-    overlay.style.display = 'flex';
-    overlay.innerHTML = '<div class="rutas-iframe-msg"><span style="font-size:1.4rem;">🛣️</span><span>Cargando...</span></div>';
-  }
-  if (iframe) iframe.src = AGVP_URLS[tipo];
-  if (extLink) extLink.href = AGVP_URLS[tipo];
 }
 
 // ── INIT ──
